@@ -54,6 +54,23 @@ details>summary{cursor:pointer;color:var(--mute);font-size:13px;padding:4px 0}
 .lk{display:block;font-size:12px;color:var(--mute);text-decoration:none;margin:0}
 .lr{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:3px}.lr label{margin:0}
 footer{font-size:12px;color:var(--mute);margin:4px 2px 24px}footer p{margin:0 0 8px}footer a{color:inherit;text-decoration:underline}footer ul{margin:6px 0;padding-left:18px}footer li{margin-bottom:4px}
+.ln{border:1px solid var(--line);border-left-width:5px;border-radius:10px;padding:8px 10px;background:var(--card)}
+.ln textarea,.cn textarea{border-radius:10px;resize:vertical;margin:6px 0 0;display:block}
+.cn{margin:0 0 0 14px;padding:6px 0 6px 16px;border-left:3px dashed var(--line)}
+.cn.br{border-left-color:#d6453f;border-left-style:dotted}
+.cn.br .chip{border-color:#d6453f;color:#d6453f}
+@media print{
+:root:root:root{--bg:#fff;--card:#fff;--ink:#000;--mute:#444;--line:#bbb;padding:0}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{background:#fff;color:#000;font-size:12px}
+main{max-width:none;padding:0}
+.card,.step,.ln,.cn{break-inside:avoid}
+button,#q,#q+p,#sres,.lk,.sw{display:none!important}
+select{appearance:none;-webkit-appearance:none;border:0;padding:0;background:none;font-weight:600}
+textarea{border:1px solid #bbb;background:#fff}
+#wh{max-width:380px}
+footer a{text-decoration:none}
+}
 </style>
 </head>
 <body>
@@ -83,6 +100,7 @@ footer{font-size:12px;color:var(--mute);margin:4px 2px 24px}footer p{margin:0 0 
 <div class="step"><h3 id="cbth"></h3><div class="tip" id="cbtb"></div></div>
 <div class="step"><h3 id="dh">Say or ask</h3><div class="tip" id="disc"></div></div>
 <div class="step"><h3>Re-check</h3><p class="d" id="rc" style="margin:0"></p></div>
+<div class="step" id="chainstep"><h3>Later, when calm: chain analysis (DBT)</h3><div class="tip" id="chainb"></div><div id="chain" style="margin-top:10px"></div></div>
 <details style="margin-top:12px"><summary>Why this fits you</summary>
 <b class="d">Personality</b><p class="d" id="mbd" style="margin:2px 0 8px"></p>
 <b class="d">Attachment</b><p class="d" id="attd" style="margin:2px 0 8px"></p>
@@ -101,12 +119,13 @@ footer{font-size:12px;color:var(--mute);margin:4px 2px 24px}footer p{margin:0 0 
 <li><a href="https://beckinstitute.org" target="_blank" rel="noopener">Beck Institute ↗</a>: cognitive behavioral therapy (CBT), including thinking traps.</li>
 <li><a href="https://itaaworld.org" target="_blank" rel="noopener">ITAA ↗</a>: Transactional Analysis and the Parent-Adult-Child model, developed by Eric Berne.</li>
 <li>Joines &amp; Stewart (2002), <i>Personality Adaptations: A New Guide to Human Understanding in Psychotherapy and Counseling</i>: the six personality adaptations from Transactional Analysis.</li>
+<li>Linehan (2015), <i>DBT Skills Training Manual</i> (2nd ed.): behavior chain analysis.</li>
 <li>The 5-4-3-2-1 exercise: a widely used grounding technique.</li>
 <li><a href="https://www.calm.com/blog/the-feelings-wheel" target="_blank" rel="noopener">Calm: The Feelings Wheel ↗</a>: source of the feelings wheel used here.</li>
 </ul>
 <p>Links between personality, attachment, core fear and feelings are common associations, not exact rules. Personality type labels are popular tools, not clinical measures.</p>
 </details>
-<p><button class="chip" id="resetAll">Reset all settings</button></p>
+<p><button class="chip" id="printBtn">Print / save as PDF</button> <button class="chip" id="resetAll">Reset all settings</button></p>
 </footer>
 </main>
 <script>
@@ -133,7 +152,7 @@ var MBD={INTJ:"Strategic, private, driven. Under stress may over-analyse and shu
 var ATT={Secure:"Comfortable with closeness and independence. You can self-soothe and ask for help.",Anxious:"Craves closeness, fears being left. Tends to seek reassurance. Practise self-soothing before reaching out.",Avoidant:"Values independence, pulls away when close. Practise staying present and asking for small amounts of support.",Disorganized:"Wants closeness and fears it. Feelings swing. Practise grounding first, go slow, build safety in small steps."};
 var FEAR={Abandonment:"Being left alone. Reminder: I can be with myself and I can reach out.",Rejection:"Not being accepted. Reminder: one no is not a verdict on me.",Failure:"Not being good enough at things. Reminder: effort and learning count.",Unworthiness:"Being fundamentally not enough. Reminder: worth is not earned.","Loss of control":"Chaos or helplessness. Reminder: I control my next small step.",Insignificance:"Not mattering. Reminder: my presence has an effect.",Engulfment:"Being swallowed by others. Reminder: I can stay close and keep my edges.","Being unloved":"Never being truly loved. Reminder: love can be given to myself too."};
 var GS=["Name 5 things you can see","Name 4 things you can touch","Name 3 things you can hear","Name 2 things you can smell","Name 1 thing you can taste"],G=[0,0,0,0,0];
-function DEF(){return{core:"",mid:"",out:"",mb:"",att:"",fear:"",adp:"",lens:"ifs",mode:"self",manual:false,fearManual:false,inten:5}}
+function DEF(){return{core:"",mid:"",out:"",mb:"",att:"",fear:"",adp:"",lens:"ifs",mode:"self",manual:false,fearManual:false,inten:5,chain:{n:["","","","","","",""],br:[0,0,0,0,0,0],alt:["","","","","",""]}}}
 var S=DEF();
 try{var sv=JSON.parse(localStorage.getItem("innerdash")||"null");if(sv&&typeof sv.core==="string"&&(sv.core===""||WH[sv.core]))S=Object.assign(DEF(),sv)}catch(e){}
 function save(){try{localStorage.setItem("innerdash",JSON.stringify(S))}catch(e){}}
@@ -227,6 +246,17 @@ var AD={"Responsible Workaholic":["Worth was tied to achievement and doing thing
 "Creative Daydreamer":["Needs felt like a burden, so imagination and withdrawal became the way to cope.",["Name one problem and take one real-world step toward it.","Notice passive habits such as freezing, over-pleasing or shutting down, and choose a small action instead.","Remember you have as much right to ask for what you need as anyone.","Turn one idea into one concrete action each week."]],
 "Charming Manipulator":["Needs were met before being asked for, so being let down felt like abandonment and indirect tactics became a way to get care.",["Be honest with yourself about what you feel and need.","Ask directly instead of working around people.","Practise staying present with feelings and closeness.","Let yourself grieve what you missed instead of trying to even the score."]]};
 var LBL={Secure:"Secure",Anxious:"Anxious / Preoccupied",Avoidant:"Avoidant / Dismissive",Disorganized:"Disorganized / Fearful-avoidant"},TR={Anxious:["worrying about delayed replies, reading into tone, repeated check-ins or reassurance-seeking.","wait 20 minutes before following up, then send one clear message about what you need."],Avoidant:["pulling away when things get close, going quiet, needing space as soon as feelings rise.","say you need time and when you’ll be back, then actually come back."],Disorganized:["wanting closeness then pushing away, mixed signals, feeling overwhelmed by intimacy.","ground first, then say one honest sentence at a time and go slowly."],Secure:["assuming others feel as steady as you, or skipping check-ins when things seem fine.","keep asking and listening, and share what you need early."]};
+var EV={Anxious:"a delayed reply or a change in tone",Avoidant:"someone asking for more closeness",Disorganized:"warmth followed by distance",Secure:"a change of plans or a comment"};
+function evp(){return"e.g. "+(EV[S.att]||"a message, a comment or a change of plans")}
+var CH=[["Vulnerabilities","poor sleep, hunger, stress, a heavy workload…","#8a6d3b"],["Prompting event","","#e8a94a"],["Thoughts","what I told myself","#7570b3"],["Body sensations","tight chest, racing heart, hot face…","#d0707e"],["Urges","what I wanted to do","#1b9ec0"],["Actions","what I actually did","#e8896a"],["Consequences","what happened next, for me and for others","#2bb5a0"]];
+function esc(x){return String(x||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")}
+function buildChain(){var h="";CH.forEach(function(c,i){
+h+='<div class="ln" style="border-left-color:'+c[2]+'"><b style="color:'+c[2]+'">'+(i+1)+'. '+c[0]+'</b><textarea class="srch" rows="2" data-k="n" data-i="'+i+'" placeholder="'+(i===1?evp():c[1])+'">'+esc(S.chain.n[i])+'</textarea></div>';
+if(i<6){var b=S.chain.br[i];h+='<div class="cn'+(b?' br':'')+'"><button class="chip" data-b="'+i+'">'+(b?'✂ Chain broken here':'✂ Break the chain here')+'</button>'+(b?'<textarea class="srch" rows="2" data-k="alt" data-i="'+i+'" placeholder="Instead, I will…">'+esc(S.chain.alt[i])+'</textarea>':'')+'</div>'}});
+$("chain").innerHTML=h}
+$("chain").addEventListener("input",function(e){var t=e.target,k=t.dataset&&t.dataset.k;if(!k)return;S.chain[k][+t.dataset.i]=t.value;save()});
+$("chain").addEventListener("click",function(e){var b=e.target.closest?e.target.closest("[data-b]"):null;if(!b)return;var i=+b.dataset.b;S.chain.br[i]=S.chain.br[i]?0:1;save();buildChain()});
+buildChain();
 function planExtra(){var co=S.mode==="co",sub=deep().toLowerCase(),f=S.fear.toLowerCase()||"being hurt",c=S.core||"Happy",t=S.mb;
 var NEED={Happy:"to share this",Sad:"you to listen",Angry:"ten minutes, then to talk",Fearful:"you to stay calm with me",Surprised:"to think out loud",Disgusted:"reassurance that I’m still okay",Bad:"help lightening my load"};
 var AP={Anxious:"Please tell me directly where we stand, it helps me settle.",Avoidant:"I may go quiet. I’m not leaving, I need a little time and I’ll come back.",Disorganized:"I might send mixed signals. Please go slowly with me.",Secure:"Can we work through this together?"};
@@ -245,12 +275,19 @@ $("cbth").textContent="Thought check (CBT)";
 $("cbtb").innerHTML=(S.inten>=7?"<p><b>Ground first.</b> Thinking tools work better once your body has settled.</p>":"")+"<p><b>Thought:</b> what thought sits behind feeling "+sub+"? Write it as one sentence.</p><p><b>Possible thinking trap:</b> "+TP[c]+(TA[S.att]?", and "+TA[S.att]:"")+".</p><p><b>Check it:</b> what supports this thought, and what doesn’t? What would I tell a friend?</p><p><b>Balanced thought:</b> a fairer way to say this is…</p><p><b>Small action:</b> one thing I can do in the next hour.</p><p><b>Learn more:</b> <a href=\"https://beckinstitute.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--ink)\">beckinstitute.org ↗</a>. Writing your thoughts down gives your mind a clear task.</p>";
 var dh=$("adp");if(!dh.options.length){var o0=document.createElement("option");o0.value="";o0.textContent="Not sure / skip";dh.appendChild(o0);Object.keys(AD).forEach(function(k){var o=document.createElement("option");o.value=o.textContent=k;dh.appendChild(o)})}dh.value=S.adp||"";dh.onchange=function(){S.adp=this.value;save();render()};
 if(!AD[S.adp]){$("pathc").style.display="none"}else{var ad=AD[S.adp];$("pathc").style.display="";$("pathb").innerHTML="<p><b>"+S.adp+"</b> pattern: "+ad[0]+"</p><p><b>Steps toward earned secure attachment:</b></p><ul>"+ad[1].map(function(x){return"<li>"+x+"</li>"}).join("")+"</ul><p class=\"d\">These are patterns you may recognise in yourself, not labels. Earned security builds slowly and works best when you are calm, not in the middle of a feeling.</p>"}
+$("chainstep").style.display=S.inten<=5?"":"none";
+$("chainb").innerHTML="<p>Think of a recent time you felt <b>"+sub+"</b>. Fill in each link in order, then tap ✂ where you could break the chain next time.</p><p class=\"d\">Your notes stay in this browser only. The aim is to understand what happened, not to blame yourself.</p>";
+var pe=document.querySelector('#chain textarea[data-i="1"][data-k="n"]');if(pe)pe.placeholder=evp();
 $("trig").style.display=S.att?"":"none";if(S.att)$("trig").innerHTML="<p><b>Watch for ("+LBL[S.att]+"):</b> "+TR[S.att][0]+"</p><p><b>Counter-move:</b> "+TR[S.att][1]+"</p>";
 $("dh").textContent=""+(co?"Say or ask":"Reflect (journal or think)");
 $("disc").innerHTML=L.map(function(x){return"<p>"+x+"</p>"}).join("")}
 $("lIFS").onclick=function(){S.lens="ifs";save();render()};
 $("lPAC").onclick=function(){S.lens="pac";save();render()};
-$("resetAll").onclick=function(){try{localStorage.removeItem("innerdash")}catch(e){}S=DEF();G=[0,0,0,0,0];$("q").value="";$("sres").innerHTML="";render()};
+var wasOpen=[];
+window.addEventListener("beforeprint",function(){wasOpen=[];document.querySelectorAll("details").forEach(function(d){wasOpen.push(d.open);d.open=true});document.querySelectorAll("textarea").forEach(function(t){t.style.height="auto";t.style.height=t.scrollHeight+"px"})});
+window.addEventListener("afterprint",function(){document.querySelectorAll("details").forEach(function(d,i){d.open=!!wasOpen[i]});document.querySelectorAll("textarea").forEach(function(t){t.style.height=""})});
+$("printBtn").onclick=function(){window.print()};
+$("resetAll").onclick=function(){try{localStorage.removeItem("innerdash")}catch(e){}S=DEF();G=[0,0,0,0,0];buildChain();$("q").value="";$("sres").innerHTML="";render()};
 $("tg").onclick=function(){S.mode=S.mode==="co"?"self":"co";S.manual=true;save();render()};
 $("auto").onclick=function(){S.manual=false;save();render()};
 $("fauto").onclick=function(){S.fearManual=false;save();render()};
