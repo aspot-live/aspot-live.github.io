@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Inner Dashboard</title>
+<style>
+:root{--bg:#f6f4ef;--card:#fff;--ink:#22252b;--mute:#6b7280;--line:#e2ded4;--acc:#4b5fd6;--fc:#4b5fd6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14161b;--card:#1d2027;--ink:#eceef2;--mute:#9aa1ad;--line:#2d313b}}
+:root[data-theme="dark"]{--bg:#14161b;--card:#1d2027;--ink:#eceef2;--mute:#9aa1ad;--line:#2d313b}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:720px;margin:0 auto;padding:16px}
+h1{font:600 22px/1.2 Georgia,serif;margin:4px 0 2px}
+.sub{color:var(--mute);margin:0 0 14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:14px}
+.card h2{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:0 0 10px;font-weight:600;display:flex;justify-content:space-between;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);border-radius:999px;padding:7px 12px;font:inherit;cursor:pointer}
+.chip.on{background:var(--c,var(--acc));border-color:var(--c,var(--acc));color:#fff}
+.mb{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.mb .chip{border-radius:10px;padding:8px 2px;font-size:13px;text-align:center}
+.mb small{display:block;font-size:10px;opacity:.75}
+#wh{width:100%;max-width:560px;display:block;margin:0 auto}
+#wh path.sg{cursor:pointer;stroke:var(--card);stroke-width:1;transition:opacity .2s}
+#wh path.sel{stroke:var(--ink);stroke-width:3}
+#wh text{fill:#fff;text-anchor:middle;dominant-baseline:central;pointer-events:none;stroke:rgba(0,0,0,.28);stroke-width:.5px;paint-order:stroke;font-family:system-ui,sans-serif}
+.path{text-align:center;margin:8px 0;font-weight:600}
+.srch{width:100%;padding:10px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);font:inherit;font-size:16px;margin-bottom:8px}
+.chip small{opacity:.75;font-size:11px;margin-left:4px}
+.sw{display:flex;align-items:center;justify-content:center;gap:12px;margin:4px 0 10px}
+.sw span{font-weight:600;color:var(--mute)}.sw span.on{color:var(--ink)}
+.tg{width:68px;height:34px;border-radius:999px;background:var(--acc);border:0;position:relative;cursor:pointer}
+.tg i{position:absolute;top:4px;left:4px;width:26px;height:26px;border-radius:50%;background:#fff;transition:transform .25s}
+.tg.co i{transform:translateX(34px)}.tg.co{background:#d6603f}
+input[type=range]{width:100%;accent-color:var(--fc)}
+.sum{font-size:15px}.sum p{margin:0 0 6px}.sum b{font-weight:600}
+.tip{border-left:4px solid var(--fc);background:color-mix(in srgb,var(--fc) 10%,transparent);padding:10px 12px;border-radius:0 10px 10px 0;margin-top:8px}
+.tip p{margin:0 0 6px}.tip p:last-child{margin:0}
+.d{color:var(--mute);font-size:13px;margin:8px 0 0}
+.badge{font-size:11px;border-radius:999px;padding:2px 9px;background:var(--line);color:var(--ink);letter-spacing:0;text-transform:none}
+.badge.rec{background:#d6603f;color:#fff}
+.gr{display:flex;flex-direction:column;gap:6px;margin-bottom:8px}
+.gr .chip{text-align:left;border-radius:10px}
+.two{display:grid;grid-template-columns:1fr;gap:4px}
+label{display:block;font-size:12px;color:var(--mute);margin:0 0 3px}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+details>summary{cursor:pointer;color:var(--mute);font-size:13px;padding:4px 0}
+.step{border-top:1px solid var(--line);padding-top:10px;margin-top:12px}
+.step h3{font-size:14px;margin:0 0 8px;display:flex;justify-content:space-between;align-items:center}
+.gr{flex-direction:column;flex-wrap:nowrap}
+.plan{border-color:var(--fc);border-width:2px}
+.lk{display:block;font-size:12px;color:var(--mute);text-decoration:none;margin:0}
+.lr{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:3px}.lr label{margin:0}
+footer{font-size:12px;color:var(--mute);margin:4px 2px 24px}footer p{margin:0 0 8px}footer a{color:inherit;text-decoration:underline}footer ul{margin:6px 0;padding-left:18px}footer li{margin-bottom:4px}
+</style>
+</head>
+<body>
+<main>
+<h1>Inner Dashboard</h1>
+<p class="sub">Set your profile once, pick a feeling, follow the recovery plan.</p>
+<div class="card"><h2>My profile</h2>
+<div class="two"><div><div class="lr"><label for="mb">Personality</label><a class="lk" href="https://www.16personalities.com" target="_blank" rel="noopener">Take the test: 16personalities.com ↗</a></div><select class="srch" id="mb" aria-label="Personality type"></select></div><div><div class="lr"><label for="att">Attachment</label><a class="lk" href="https://www.attachmentproject.com/" target="_blank" rel="noopener">Take the test: attachmentproject.com ↗</a></div><select class="srch" id="att" aria-label="Attachment style"></select></div><div><div class="lr"><label for="adp">Personality adaptation (optional)</label></div><select class="srch" id="adp" aria-label="Personality adaptation"></select></div></div>
+<label for="fear">Core fear</label><select class="srch" id="fear" aria-label="Core fear"></select>
+<div class="row"><button class="chip" id="fauto"></button><span class="d" id="fwhy"></span></div></div>
+
+<div class="card"><h2>How I feel now</h2>
+<input class="srch" id="q" type="search" placeholder="Search a feeling, e.g. overwhelmed" autocomplete="off">
+<p class="d" style="margin:0 0 8px">Alternatively, tap the wheel. The inner ring is the core feeling, then more specific rings outward.</p>
+<div class="chips" id="sres" style="margin-bottom:10px"></div>
+<p class="path" id="path" style="margin:4px 0"></p>
+<svg id="wh" viewBox="0 0 520 520" aria-label="Feelings wheel"></svg>
+<label for="int" style="margin-top:10px">Intensity: <span id="intv"></span></label><input type="range" id="int" min="1" max="10" value="5"></div>
+
+<div class="card plan"><h2>Recovery plan</h2>
+<div class="sum" id="sum"></div>
+<div class="step" id="gstep"><h3>Ground <span class="badge" id="gb"></span></h3><div class="gr" id="gr"></div><div class="tip"><p id="gt"></p></div></div>
+<div class="step"><h3>Regulate</h3>
+<div class="sw"><span id="lSelf">Self</span><button class="tg" id="tg" aria-label="Toggle self or co-regulation"><i></i></button><span id="lCo">Co</span></div>
+<p class="d" id="why" style="text-align:center"></p><div class="chips" style="justify-content:center"><button class="chip" id="auto"></button></div><div id="tips"></div><div class="tip" id="trig" style="margin-top:8px"></div></div>
+<div class="step"><h3 id="ifsh"></h3><div class="chips" style="margin-bottom:8px"><button class="chip" id="lIFS">IFS parts</button><button class="chip" id="lPAC">Parent-Adult-Child</button></div><div class="tip" id="ifsb"></div></div>
+<div class="step"><h3 id="cbth"></h3><div class="tip" id="cbtb"></div></div>
+<div class="step"><h3 id="dh">Say or ask</h3><div class="tip" id="disc"></div></div>
+<div class="step"><h3>Re-check</h3><p class="d" id="rc" style="margin:0"></p></div>
+<details style="margin-top:12px"><summary>Why this fits you</summary>
+<b class="d">Personality</b><p class="d" id="mbd" style="margin:2px 0 8px"></p>
+<b class="d">Attachment</b><p class="d" id="attd" style="margin:2px 0 8px"></p>
+<b class="d">Core fear</b><p class="d" id="feard" style="margin:2px 0 0"></p></details>
+</div>
+<div class="card" id="pathc" style="display:none"><h2>Path to earned secure attachment</h2><div id="pathb"></div></div>
+<footer>
+<p><b>This is not therapy.</b> Inner Dashboard is a general self-reflection guide built on common psychological ideas. It is not a diagnosis or treatment and can’t replace a trained therapist. For heavy trauma, very strong feelings, or if you feel unsafe, please work with a trained professional or contact your local emergency services or a crisis line.</p>
+<p><b>Looking for support?</b> <a href="https://www.betterhelp.com" target="_blank" rel="noopener">BetterHelp ↗</a> is an online platform for connecting with a therapist. It is one option among many.</p>
+<details><summary>References and sources</summary>
+<ul>
+<li><a href="https://www.attachmentproject.com/" target="_blank" rel="noopener">Attachment Project ↗</a>: attachment style test and information.</li>
+<li>Bartholomew &amp; Horowitz (1991), “Attachment styles among young adults: a test of a four-category model”, <i>Journal of Personality and Social Psychology</i>: the four attachment styles used here.</li>
+<li><a href="https://www.16personalities.com" target="_blank" rel="noopener">16Personalities ↗</a>: personality types and nicknames such as Architect.</li>
+<li><a href="https://ifs-institute.com" target="_blank" rel="noopener">IFS Institute ↗</a>: Internal Family Systems, developed by Richard Schwartz.</li>
+<li><a href="https://beckinstitute.org" target="_blank" rel="noopener">Beck Institute ↗</a>: cognitive behavioral therapy (CBT), including thinking traps.</li>
+<li><a href="https://itaaworld.org" target="_blank" rel="noopener">ITAA ↗</a>: Transactional Analysis and the Parent-Adult-Child model, developed by Eric Berne.</li>
+<li>Joines &amp; Stewart (2002), <i>Personality Adaptations: A New Guide to Human Understanding in Psychotherapy and Counseling</i>: the six personality adaptations from Transactional Analysis.</li>
+<li>The 5-4-3-2-1 exercise: a widely used grounding technique.</li>
+<li><a href="https://www.calm.com/blog/the-feelings-wheel" target="_blank" rel="noopener">Calm: The Feelings Wheel ↗</a>: source of the feelings wheel used here.</li>
+</ul>
+<p>Links between personality, attachment, core fear and feelings are common associations, not exact rules. Personality type labels are popular tools, not clinical measures.</p>
+</details>
+<p><button class="chip" id="resetAll">Reset all settings</button></p>
+</footer>
+</main>
+<script>
+var W=[
+["Fearful","#1b9ec0","Scared:Helpless,Frightened;Anxious:Overwhelmed,Worried;Insecure:Inadequate,Inferior;Weak:Worthless,Insignificant;Rejected:Excluded,Persecuted;Threatened:Nervous,Exposed"],
+["Angry","#7570b3","Let down:Betrayed,Resentful;Humiliated:Disrespected,Ridiculed;Bitter:Indignant,Violated;Mad:Furious,Jealous;Aggressive:Provoked,Hostile;Frustrated:Infuriated,Annoyed;Distant:Withdrawn,Numb;Critical:Sceptical,Dismissive"],
+["Disgusted","#a77bb8","Disapproving:Judgmental,Embarrassed;Disappointed:Appalled,Revolted;Awful:Nauseated,Detestable;Repelled:Horrified,Hesitant"],
+["Sad","#d0707e","Hurt:Embarrassed,Disappointed;Depressed:Inferior,Empty;Guilty:Remorseful,Ashamed;Despair:Powerless,Grief;Vulnerable:Fragile,Victimised;Lonely:Abandoned,Isolated"],
+["Happy","#e8896a","Optimistic:Inspired,Hopeful;Trusting:Intimate,Sensitive;Peaceful:Thankful,Loving;Powerful:Creative,Courageous;Accepted:Valued,Respected;Proud:Confident,Successful;Interested:Inquisitive,Curious;Content:Joyful,Free;Playful:Cheeky,Aroused"],
+["Surprised","#e8a94a","Excited:Energetic,Eager;Amazed:Awe,Astonished;Confused:Perplexed,Disillusioned;Startled:Dismayed,Shocked"],
+["Bad","#2bb5a0","Tired:Unfocused,Sleepy;Stressed:Out of control,Overwhelmed;Busy:Rushed,Pressured;Bored:Apathetic,Indifferent"]];
+var WH={};
+W.forEach(function(r){WH[r[0]]={c:r[1],m:r[2].split(";").map(function(s){var p=s.split(":");return[p[0],p[1].split(",")]})}});
+var T={
+Happy:{s:["Savor it: name three things going right.","Slow breath, let your shoulders drop, stay with the feeling for 60 seconds."],c:["Share it with someone you trust.","Celebrate together, let them reflect it back."],g:"Not needed now. Enjoy it and notice what helped."},
+Sad:{s:["Place a hand on your chest and say what you lost.","Gentle movement, warm drink, let it move through without fixing it."],c:["Tell someone: I’m sad and I don’t need fixing.","Sit near a safe person, ask for a hug or just company."],g:"Hand on chest, slow breath, wrap up warm. Let the feeling move without fixing it."},
+Angry:{s:["Exhale longer than you inhale, 6 rounds. Then ask: what boundary was crossed?","Push your palms against a wall, shake out your hands, delay replying."],c:["Say: I need ten minutes, then I’ll talk about it.","Name the need underneath, ask for repair rather than winning."],g:"Long exhale (in 4, out 6) for 6 rounds. Cold water on wrists, or push palms into a wall."},
+Fearful:{s:["Feet on floor, name 5 things you see. Write the worst case, then the likeliest case.","Cold water on face or a slow walk, shrink the task to one next step."],c:["Ask: can you stay with me while I settle?","Let a steady person talk slowly, match their breathing."],g:"Box breathing: in 4, hold 4, out 4, hold 4, four rounds. Press feet flat into the floor."},
+Surprised:{s:["Pause before reacting, name what you expected vs what happened.","Write down the facts only, decide later."],c:["Think out loud with someone calm.","Ask for a second perspective before concluding."],g:"Pause. Name what you expected vs what happened. Wait a few breaths before reacting."},
+Disgusted:{s:["Speak to yourself as you would to a friend. The act was a mistake, you are not the mistake.","Name it: this is shame or disgust. Soften your jaw and gaze."],c:["Tell one safe person what happened. Shame shrinks when witnessed.","Ask: can you remind me I’m still okay?"],g:"Change the scene: step outside or open a window, rinse your hands, slow breaths."},
+Bad:{s:["Drink water, eat something, name the one thing that matters most today.","Stop, stretch, then do just one small task."],c:["Tell someone you’re stretched thin and ask for one thing off your plate.","Work alongside a calm person for 15 minutes."],g:"Drink water, stretch for 2 minutes, then pick one tiny next task. Rest is a task too."}};
+var MB=[["INTJ","Architect"],["INTP","Logician"],["ENTJ","Commander"],["ENTP","Debater"],["INFJ","Advocate"],["INFP","Mediator"],["ENFJ","Protagonist"],["ENFP","Campaigner"],["ISTJ","Logistician"],["ISFJ","Defender"],["ESTJ","Executive"],["ESFJ","Consul"],["ISTP","Virtuoso"],["ISFP","Adventurer"],["ESTP","Entrepreneur"],["ESFP","Entertainer"]];
+var MBD={INTJ:"Strategic, private, driven. Under stress may over-analyse and shut feelings out. Needs: name the feeling, then plan.",INTP:"Curious and inward. Stress shows as withdrawal into thought. Needs: translate thoughts into feelings.",ENTJ:"Decisive, pushes forward. Stress shows as control or bluntness. Needs: pause and check in with people.",ENTP:"Quick, playful, restless. Stress shows as scattering. Needs: finish one thing, ground the body.",INFJ:"Intuitive, empathic, absorbs others’ moods. Needs: boundaries and alone time.",INFP:"Values-led and sensitive. Stress shows as self-criticism. Needs: gentle self-talk, creative outlet.",ENFJ:"Warm, responsible for others. Stress shows as over-giving. Needs: ask for support yourself.",ENFP:"Enthusiastic, feels deeply. Stress shows as overwhelm. Needs: structure and rest.",ISTJ:"Reliable and steady. Stress shows as rigidity. Needs: permission for imperfection.",ISFJ:"Caring, protective. Stress shows as silent resentment. Needs: say what you need aloud.",ESTJ:"Organised, direct. Stress shows as pressure on others. Needs: soften and listen.",ESFJ:"Social, nurturing. Stress shows as seeking approval. Needs: self-validation.",ISTP:"Calm, hands-on. Stress shows as detachment. Needs: movement, then words.",ISFP:"Gentle, present. Stress shows as shutdown. Needs: safe space and slow pace.",ESTP:"Bold, action-first. Stress shows as risk-taking. Needs: pause before moving.",ESFP:"Lively, in the moment. Stress shows as avoidance. Needs: face it with a friend."};
+var ATT={Secure:"Comfortable with closeness and independence. You can self-soothe and ask for help.",Anxious:"Craves closeness, fears being left. Tends to seek reassurance. Practise self-soothing before reaching out.",Avoidant:"Values independence, pulls away when close. Practise staying present and asking for small amounts of support.",Disorganized:"Wants closeness and fears it. Feelings swing. Practise grounding first, go slow, build safety in small steps."};
+var FEAR={Abandonment:"Being left alone. Reminder: I can be with myself and I can reach out.",Rejection:"Not being accepted. Reminder: one no is not a verdict on me.",Failure:"Not being good enough at things. Reminder: effort and learning count.",Unworthiness:"Being fundamentally not enough. Reminder: worth is not earned.","Loss of control":"Chaos or helplessness. Reminder: I control my next small step.",Insignificance:"Not mattering. Reminder: my presence has an effect.",Engulfment:"Being swallowed by others. Reminder: I can stay close and keep my edges.","Being unloved":"Never being truly loved. Reminder: love can be given to myself too."};
+var GS=["Name 5 things you can see","Name 4 things you can touch","Name 3 things you can hear","Name 2 things you can smell","Name 1 thing you can taste"],G=[0,0,0,0,0];
+function DEF(){return{core:"",mid:"",out:"",mb:"",att:"",fear:"",adp:"",lens:"ifs",mode:"self",manual:false,fearManual:false,inten:5}}
+var S=DEF();
+try{var sv=JSON.parse(localStorage.getItem("innerdash")||"null");if(sv&&typeof sv.core==="string"&&(sv.core===""||WH[sv.core]))S=Object.assign(DEF(),sv)}catch(e){}
+function save(){try{localStorage.setItem("innerdash",JSON.stringify(S))}catch(e){}}
+function $(i){return document.getElementById(i)}
+function deep(){return S.out||S.mid||S.core}
+
+var N=0,k=Math.PI/180,h="",a=0;
+W.forEach(function(r){WH[r[0]].m.forEach(function(m){N+=m[1].length})});
+var u=360/N;
+function g(r,a){return[(260+r*Math.sin(a*k)).toFixed(1),(260-r*Math.cos(a*k)).toFixed(1)]}
+function P(r0,r1,a0,a1){var p=g(r1,a0),q=g(r1,a1),s=g(r0,a1),t=g(r0,a0),L=a1-a0>180?1:0;return"M"+p+"A"+r1+" "+r1+" 0 "+L+" 1 "+q+"L"+s+"A"+r0+" "+r0+" 0 "+L+" 0 "+t+"Z"}
+function seg(l,r0,r1,a0,a1,c,m,o,op,tx,fs){var am=(a0+a1)/2,p=g((r0+r1)/2,am),q=am<180?am-90:am+90;
+return'<path class="sg" d="'+P(r0,r1,a0,a1)+'" fill="'+WH[c].c+'" fill-opacity="'+op+'" data-l="'+l+'" data-c="'+c+'" data-m="'+m+'" data-o="'+o+'"/><text x="'+p[0]+'" y="'+p[1]+'" transform="rotate('+q.toFixed(1)+' '+p[0]+' '+p[1]+')" font-size="'+fs+'">'+tx+'</text>'}
+W.forEach(function(r){var c=r[0],a0=a,ms="",os="";
+WH[c].m.forEach(function(m){var m0=a;m[1].forEach(function(o){os+=seg("out",185,250,a,a+u,c,m[0],o,.6,o,8);a+=u});ms+=seg("mid",95,185,m0,a,c,m[0],"",.8,m[0],10)});
+h+=os+ms+seg("core",38,95,a0,a,c,"","",1,c,12)});
+$("wh").innerHTML=h+'<circle id="ctr" cx="260" cy="260" r="36" style="fill:var(--card);stroke:var(--line);stroke-width:2;cursor:pointer"/><text x="260" y="260" style="fill:var(--mute);stroke:none;font-size:11px">Reset</text>';
+$("wh").addEventListener("click",function(e){var t=e.target;if(t.id==="ctr"){S.core="";S.mid="";S.out="";G=[0,0,0,0,0];save();render();return}if(!t.classList||!t.classList.contains("sg"))return;var l=t.dataset.l;S.core=t.dataset.c;S.mid=l==="core"?"":t.dataset.m;S.out=l==="out"?t.dataset.o:"";G=[0,0,0,0,0];save();render()});
+
+var IDX=[],SYN={upset:"hurt",burnout:"tired",burnt:"tired",panic:"frightened",lost:"confused",stuck:"helpless",rage:"furious",miserable:"depressed",down:"depressed",afraid:"scared",worry:"worried",stress:"stressed"};
+W.forEach(function(r){var c=r[0];IDX.push({n:c,c:c,m:"",o:""});WH[c].m.forEach(function(m){IDX.push({n:m[0],c:c,m:m[0],o:""});m[1].forEach(function(o){IDX.push({n:o,c:c,m:m[0],o:o})})})});
+function find(q){var r=IDX.filter(function(x){return x.n.toLowerCase().indexOf(q)>-1});return r}
+$("q").addEventListener("input",function(){var q=this.value.trim().toLowerCase(),box=$("sres");box.innerHTML="";if(!q)return;
+q=SYN[q]||q;var r=find(q);
+if(!r.length)r=find(q.replace(/(ness|ing|ity|ed|ly|y|s)$/,""));
+if(!r.length&&q.length>3)r=find(q.slice(0,4));
+r.sort(function(a,b){return (b.n.toLowerCase().indexOf(q)===0)-(a.n.toLowerCase().indexOf(q)===0)});
+if(!r.length){box.innerHTML="<span class='d'>No match. Try a similar word, or browse the wheel.</span>";return}
+r.slice(0,8).forEach(function(x){var b=document.createElement("button");b.className="chip on";b.style.setProperty("--c",WH[x.c].c);b.innerHTML=x.n+"<small>"+[x.c,x.m].filter(function(v){return v&&v!==x.n}).join(" › ")+"</small>";b.onclick=function(){S.core=x.c;S.mid=x.m;S.out=x.o;G=[0,0,0,0,0];$("q").value="";box.innerHTML="";save();render()};box.appendChild(b)})});
+function suggestFear(){var sc={},rs={};function add(f,p,w){sc[f]=(sc[f]||0)+w;rs[f]=rs[f]||[];if(rs[f].indexOf(p)<0)rs[f].push(p)}
+var A={Anxious:[["Abandonment",3],["Rejection",1]],Avoidant:[["Engulfment",3],["Loss of control",1]],Disorganized:[["Abandonment",2],["Engulfment",2]],Secure:[["Failure",1]]};
+(A[S.att]||[]).forEach(function(x){add(x[0],S.att.toLowerCase()+" attachment",x[1])});
+var t=S.mb,M=t.charAt(1)==="N"?(t.charAt(2)==="T"?[["Failure",2],["Loss of control",1]]:[["Being unloved",2],["Rejection",1]]):(t.charAt(3)==="J"?[["Loss of control",2],["Failure",1]]:[["Engulfment",1],["Insignificance",1]]);
+if(t)M.forEach(function(x){add(x[0],t,x[1])});
+var FMAP={Sad:[["Being unloved",1],["Abandonment",1]],Fearful:[["Loss of control",1]],Angry:[["Loss of control",1]],Disgusted:[["Unworthiness",2]],Surprised:[["Loss of control",1]],Bad:[["Failure",1],["Loss of control",1]],Happy:[]},
+MMAP={Lonely:[["Abandonment",2]],Rejected:[["Rejection",2]],Weak:[["Unworthiness",2]],Insecure:[["Unworthiness",2],["Failure",1]],"Let down":[["Abandonment",1]],Humiliated:[["Rejection",2]],Distant:[["Engulfment",1]],Critical:[["Engulfment",1]],Depressed:[["Unworthiness",1],["Insignificance",1]],Despair:[["Insignificance",2]],Guilty:[["Unworthiness",1]],Stressed:[["Failure",2]],Busy:[["Failure",1]]};
+(FMAP[S.core]||[]).concat(MMAP[S.mid]||[]).forEach(function(x){add(x[0],deep().toLowerCase()+" feeling",x[1])});
+var ADF={"Responsible Workaholic":[["Failure",1],["Unworthiness",1]],"Playful Resister":[["Loss of control",1],["Engulfment",1]],"Enthusiastic Overreactor":[["Being unloved",1],["Abandonment",1]],"Brilliant Skeptic":[["Loss of control",1],["Rejection",1]],"Creative Daydreamer":[["Insignificance",1],["Abandonment",1]],"Charming Manipulator":[["Abandonment",1],["Being unloved",1]]};
+(ADF[S.adp]||[]).forEach(function(x){add(x[0],S.adp.toLowerCase()+" adaptation",x[1])});
+if(!Object.keys(sc).length)return{f:"",why:"Fill in your attachment style, personality or a feeling and I’ll suggest a core fear."};
+var best="Abandonment",bs=-1;Object.keys(FEAR).forEach(function(f){if((sc[f]||0)>bs){bs=sc[f]||0;best=f}});
+return{f:best,why:"Suggested from "+(rs[best]||["your current mix"]).join(", ")+"."}}
+function suggest(){if(!S.core)return{mode:"self",why:""};var FM={Happy:1,Sad:1,Angry:-1,Fearful:.5,Surprised:-1,Disgusted:1,Bad:-.5},
+FC={Happy:"joy is better shared",Sad:"sadness eases when someone is with you",Angry:"anger needs cooling down before you talk",Fearful:"fear settles with a steady person nearby",Surprised:"surprise needs a moment to think",Disgusted:"shame and disgust ease when you’re heard",Bad:"being worn down needs a reset first"},
+AC={Secure:"your secure base works either way",Anxious:"your anxious attachment can push you to seek reassurance too fast",Avoidant:"your avoidant side tends to pull away",Disorganized:"your fearful-avoidant side needs one safe person, taken slowly"},
+AV={Secure:0,Anxious:-1,Avoidant:1,Disorganized:.5},
+sb={lonely:2,isolated:2,abandoned:2,empty:1,hurt:1,rejected:1,scared:1,overwhelmed:1,excluded:1,annoyed:-1,critical:-1,startled:-1,jealous:-1,confused:-.5,furious:-1,hostile:-1},
+f=FM[S.core]+(sb[deep().toLowerCase()]||0),a=AV[S.att]||0,s=f+a,hi=S.inten>=8;
+if(hi)s+=S.core==="Angry"?-1:1;
+var m=s>0?"co":"self",fl=f>0?"co":"self",al=a>0?"co":a<0?"self":"",F=FC[S.core],A=AC[S.att],t;
+if(!A)t=F+(fl===m?".":", so "+(m==="self"?"settle yourself first, then reach out.":"reach out rather than coping alone."));else if(fl===m&&(al===m||al===""))t=F+", and "+A+(S.att==="Avoidant"?", so reaching out helps.":".");
+else if(fl!==m)t=F+(al===""?", and ":", but ")+A+", so "+(m==="self"?"settle yourself first, then reach out.":"reach out rather than coping alone.");
+else t=F+", though "+A+", so "+(m==="co"?"ask directly for what you need.":"reach out once you’ve calmed down.");
+if(hi)t+=S.core==="Angry"?" Intensity is high, so cool down first.":" Intensity is high, so try not to carry it alone.";
+return{mode:m,why:"Suggested "+(m==="co"?"co-regulate":"self-regulate")+": "+t}}
+function ph(x){if(!x.options.length){var o=document.createElement("option");o.value="";o.textContent="Select…";x.appendChild(o)}}
+function chips(el,items,key){var x=$(el);x.innerHTML="";items.forEach(function(i){var b=document.createElement("button");b.className="chip"+(S[key]===i?" on":"");b.textContent=i;b.onclick=function(){S[key]=i;save();render()};x.appendChild(b)})}
+function render(){
+var c=S.core||"Happy",col=WH[c].c,t=T[c];document.documentElement.style.setProperty("--fc",S.core?col:"#6b7280");
+var sg=suggest();if(!S.manual)S.mode=sg.mode;var sf=suggestFear();if(!S.fearManual)S.fear=sf.f;
+$("why").textContent=S.manual?"Manual setting. Suggestion: "+(sg.mode==="co"?"co-regulate":"self-regulate")+".":sg.why;
+$("auto").textContent=S.manual?"Switch is manual: tap to auto-set":"Auto-set: on";$("auto").className="chip"+(S.manual?"":" on");
+document.querySelectorAll("#wh path.sg").forEach(function(p){var d=p.dataset,l=d.l,dp=S.out?"out":S.mid?"mid":"core";
+p.style.opacity=(!S.core||d.c===c)?1:.3;
+p.classList.toggle("sel",!!S.core&&l===dp&&d.c===c&&(l==="core"||(d.m===S.mid&&(l==="mid"||d.o===S.out))))});
+$("path").innerHTML=S.core?"<span style='color:"+col+"'>"+[S.core,S.mid,S.out].filter(Boolean).join(" › ")+"</span>":"<span style='color:var(--mute)'>No feeling selected. Tap the wheel or search.</span>";document.querySelector(".plan").style.display=S.core?"":"none";
+$("int").value=S.inten;$("intv").textContent=S.inten+" / 10";
+var need=["Fearful","Bad","Surprised","Angry"].indexOf(c)>-1||S.inten>=7||S.att==="Disorganized";
+$("gb").textContent="Recommended";$("gb").className="badge rec";$("gstep").style.display=need?"":"none";
+var gr=$("gr");gr.innerHTML="";GS.forEach(function(s,i){var b=document.createElement("button");b.className="chip"+(G[i]?" on":"");b.textContent=(G[i]?"✓ ":"")+s;b.onclick=function(){G[i]=G[i]?0:1;render()};gr.appendChild(b)});
+$("gt").innerHTML="<b>5-4-3-2-1:</b> go slowly and tap each line as you do it.<br><b>For "+c.toLowerCase()+":</b> "+t.g;
+var co=S.mode==="co";$("tg").className="tg"+(co?" co":"");$("lSelf").className=co?"":"on";$("lCo").className=co?"on":"";
+var tp=(co?t.c:t.s).map(function(x){return"<p>"+x+"</p>"}).join("");
+var extra=S.att==="Anxious"?(co?"Ask clearly for reassurance rather than testing.":"Soothe yourself first, then decide if you still need to reach out."):S.att==="Avoidant"?(co?"Reach out even a little, a short message counts.":"Notice if you are using alone-time to hide, check in with one person today."):S.att==="Disorganized"?"Go slow, ground in the body, choose one safe person.":S.att==="Secure"?"You have a secure base to lean on in either mode.":"";
+$("tips").innerHTML='<div class="tip"><p><b>'+(co?"Co-regulate":"Self-regulate")+'</b></p>'+tp+(extra?'<p>'+extra+'</p>':'')+'</div>';
+var mbo=MB.filter(function(m){return m[0]===S.mb})[0],nm=mbo?mbo[1]:"",art=S.att&&/^[AEIOU]/.test(LBL[S.att])?"an":"a",mn=co?"co-regulate":"self-regulate",sgn=sg.mode==="co"?"co-regulate":"self-regulate",pr="";
+if(S.mb&&S.att&&S.fear)pr="<p>As an <b>"+S.mb+" "+nm+"</b> with "+art+" <b>"+LBL[S.att]+"</b> attachment style, my core fear is <b>"+S.fear.toLowerCase()+"</b>.</p>";
+else if(S.mb||S.att||S.fear)pr="<p>Profile so far: "+[S.mb?"<b>"+S.mb+" "+nm+"</b>":"",S.att?"<b>"+LBL[S.att]+"</b> attachment":"",S.fear?"fear of <b>"+S.fear.toLowerCase()+"</b>":""].filter(Boolean).join(" · ")+". Fill in the rest for a more tailored plan.</p>";
+else pr="<p class=\"d\">Add your personality type and attachment style above for a more tailored plan.</p>";
+$("sum").innerHTML="<p>Right now I feel <b style=\"color:"+col+"\">"+deep().toLowerCase()+"</b> ("+(deep()===c?"":c.toLowerCase()+", ")+S.inten+"/10).</p>"+pr+"<p>My inner switch is set to <b>"+mn+"</b>"+(S.manual&&sg.mode!==S.mode?", but I should try to <b>"+sgn+"</b> first.":", which suits how I feel right now.")+"</p>";
+var mh=$("mb");ph(mh);if(mh.options.length<2)MB.forEach(function(m){var o=document.createElement("option");o.value=m[0];o.textContent=m[0]+" · "+m[1];mh.appendChild(o)});mh.value=S.mb;mh.onchange=function(){S.mb=this.value;save();render()};
+$("mbd").textContent=MBD[S.mb]||"";
+var ah=$("att");ph(ah);if(ah.options.length<2)Object.keys(ATT).forEach(function(k){var o=document.createElement("option");o.value=k;o.textContent=LBL[k];ah.appendChild(o)});ah.value=S.att;ah.onchange=function(){S.att=this.value;save();render()};$("attd").textContent=ATT[S.att]||"";
+var fh=$("fear");ph(fh);if(fh.options.length<2)Object.keys(FEAR).forEach(function(k){var o=document.createElement("option");o.value=o.textContent=k;fh.appendChild(o)});fh.value=S.fear;fh.onchange=function(){S.fear=this.value;S.fearManual=true;save();render()};
+$("fwhy").textContent=S.fearManual&&sf.f?"Manual setting. Suggestion: "+sf.f+".":sf.why;$("fauto").textContent=S.fearManual?"Manual: tap to auto-set":"Auto-set: on";$("fauto").className="chip"+(S.fearManual?"":" on");$("feard").textContent=FEAR[S.fear]||"";planExtra();
+}
+var AD={"Responsible Workaholic":["Worth was tied to achievement and doing things right, so rest and mistakes can feel unsafe.",["Allow yourself a margin of error instead of aiming for perfect.","Practise leaving small things imperfect and notice you are still okay.","Schedule your own needs and rest first, before the work.","Notice the inner critic’s words and answer them kindly.","Spend time with yourself doing nothing in particular, and remind yourself you are enough as you are."]],
+"Playful Resister":["Strict control made life feel like a fight, so resisting indirectly became a way to keep some freedom.",["Practise saying a clear no instead of an indirect yes.","When it feels like there are only two options, look for a third.","Share what you feel directly, in small safe steps.","Let play and cooperation feel like your choice, not giving in."]],
+"Enthusiastic Overreactor":["Pleasing and entertaining earned attention, and big feelings became a way to be noticed.",["Separate how strongly you feel from what is actually true.","Say your boundaries out loud, especially when you fear being let down.","Treat anger as information about an unmet need.","Notice and value your thinking and skills, not only your warmth.","When hurt, stay and talk instead of pulling away."]],
+"Brilliant Skeptic":["Unpredictable caregiving made watchfulness and control feel necessary for safety.",["Build steady routines and relationships where you can loosen control slowly.","Check your assumptions about people before acting on them.","Be as kind to your vulnerable side as to your sharp, capable side.","Ask for support when anxiety rises."]],
+"Creative Daydreamer":["Needs felt like a burden, so imagination and withdrawal became the way to cope.",["Name one problem and take one real-world step toward it.","Notice passive habits such as freezing, over-pleasing or shutting down, and choose a small action instead.","Remember you have as much right to ask for what you need as anyone.","Turn one idea into one concrete action each week."]],
+"Charming Manipulator":["Needs were met before being asked for, so being let down felt like abandonment and indirect tactics became a way to get care.",["Be honest with yourself about what you feel and need.","Ask directly instead of working around people.","Practise staying present with feelings and closeness.","Let yourself grieve what you missed instead of trying to even the score."]]};
+var LBL={Secure:"Secure",Anxious:"Anxious / Preoccupied",Avoidant:"Avoidant / Dismissive",Disorganized:"Disorganized / Fearful-avoidant"},TR={Anxious:["worrying about delayed replies, reading into tone, repeated check-ins or reassurance-seeking.","wait 20 minutes before following up, then send one clear message about what you need."],Avoidant:["pulling away when things get close, going quiet, needing space as soon as feelings rise.","say you need time and when you’ll be back, then actually come back."],Disorganized:["wanting closeness then pushing away, mixed signals, feeling overwhelmed by intimacy.","ground first, then say one honest sentence at a time and go slowly."],Secure:["assuming others feel as steady as you, or skipping check-ins when things seem fine.","keep asking and listening, and share what you need early."]};
+function planExtra(){var co=S.mode==="co",sub=deep().toLowerCase(),f=S.fear.toLowerCase()||"being hurt",c=S.core||"Happy",t=S.mb;
+var NEED={Happy:"to share this",Sad:"you to listen",Angry:"ten minutes, then to talk",Fearful:"you to stay calm with me",Surprised:"to think out loud",Disgusted:"reassurance that I’m still okay",Bad:"help lightening my load"};
+var AP={Anxious:"Please tell me directly where we stand, it helps me settle.",Avoidant:"I may go quiet. I’m not leaving, I need a little time and I’ll come back.",Disorganized:"I might send mixed signals. Please go slowly with me.",Secure:"Can we work through this together?"};
+var PP=!t?"What do I need right now, and what would help?":t.charAt(1)==="N"?(t.charAt(2)==="T"?"What facts do I actually have, and what am I assuming?":"What do I need that I haven’t asked for yet?"):(t.charAt(3)==="J"?"What one thing can I control right now?":"What small action would help me move?");
+var L=co?["“I’m feeling "+sub+" (about "+S.inten+"/10). I don’t need fixing, I need "+NEED[c]+".”","“My fear of "+f+" is showing up. It would help if you…”",(AP[S.att]?"“"+AP[S.att]+"”":"“Please go gently with me while I work this out.”")]:["Where do I feel "+sub+" in my body, and what is it asking for?","Is this about now, or is my fear of "+f+" replaying?",PP];
+var PT={Happy:"a joyful part",Sad:"a hurting, younger part (an exile)",Angry:"an angry protector (a firefighter)",Fearful:"a worried protector (a manager)",Surprised:"a startled protector",Disgusted:"a shame-carrying part, often with a harsh inner critic",Bad:"a driven manager part that is pushing or overloaded"},AT={Anxious:"a reassurance-seeking protector",Avoidant:"a distancing protector",Disorganized:"protectors pulling in opposite directions",Secure:""};
+$("ifsh").textContent="Parts check-in (IFS): "+PT[c];
+$("ifsb").innerHTML=(S.inten>=7?"<p><b>Ground first.</b> Intensity is high, so settle your body before doing parts work.</p>":"")+"<p><b>Who may be here:</b> "+PT[c]+(AT[S.att]?", with "+AT[S.att]:"")+"."+(c==="Happy"?" Notice whether it feels calm and open (Self) or anxious to keep the good feeling from ending.":" Behind a protector there is often a younger part afraid of "+f+".")+"</p><p><b>Find it:</b> where do I notice this part in my body, and what does it look or sound like?</p><p><b>Feel toward it:</b> curious and calm means Self is present. If I feel annoyed or afraid of it, ask that feeling to step back, then check again.</p><p><b>Ask it:</b> what are you afraid would happen if you stopped? What do you need from me?</p><p><b>Thank it</b> and tell it one thing I will do to help, using the plan above.</p><p><b>Learn more:</b> <a href=\"https://ifs-institute.com\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--ink)\">ifs-institute.com ↗</a>. Reading about your parts gives your mind something steady to focus on and can bring clarity.</p>";
+$("rc").textContent=S.inten>=7?"Intensity is high. After about 5 minutes, move the slider. If it is still 7 or more, switch the regulation mode or reach out to someone.":"Intensity is manageable. After about 5 minutes, check in again and move the slider. If it has dropped, you can stop here. If it rises to 7 or more, switch the regulation mode or reach out to someone.";
+$("lIFS").className="chip"+(S.lens==="pac"?"":" on");$("lPAC").className="chip"+(S.lens==="pac"?" on":"");
+if(S.lens==="pac"){var PS={Happy:"your Free Child or Adult (playful, open)",Sad:"your Child (hurt, longing)",Angry:"your Child (rebellious, angry) or a Critical Parent voice",Fearful:"your frightened Child, or a worried Parent voice",Surprised:"your Child reacting, with your Adult needed to think",Disgusted:"a harsh Critical Parent voice, with an ashamed Child",Bad:"a driven Parent (“shoulds”) with a tired Child"},PA={Anxious:"a strong pull to seek reassurance",Avoidant:"a pull to withdraw or dismiss feelings",Disorganized:"Child and Parent voices pulling in opposite directions",Secure:""};
+$("ifsh").textContent="Ego-state check-in (Parent-Adult-Child): "+PS[c];
+$("ifsb").innerHTML=(S.inten>=7?"<p><b>Ground first.</b> Intensity is high, so settle your body before this exercise.</p>":"")+"<p><b>Who may be speaking:</b> "+PS[c]+(PA[S.att]?", with "+PA[S.att]:"")+".</p><p><b>Who is speaking?</b> Is it my Parent (rules, criticism or care), my Child (feelings, needs, fear) or my Adult (facts, the present moment)?</p><p><b>Hear the Parent:</b> what is it saying (“you should…”, “you always…”)? Whose voice does it sound like?</p><p><b>Hear the Child:</b> what does it feel and need right now? What would a caring Parent say to it?</p><p><b>Adult response:</b> given the facts today, what is a fair response, and what do I choose to do?</p><p><b>"+(co?"Say it Adult to Adult":"Self-talk")+":</b> "+(co?"“I notice a younger part of me feels afraid of "+f+". Can we talk about it calmly?”":"speak as a caring Parent to my Child, with my Adult in charge.")+"</p><p><b>Learn more:</b> <a href=\"https://itaaworld.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--ink)\">itaaworld.org ↗</a>. Naming who is speaking helps you respond from the present rather than from old patterns.</p>"}
+var TP={Happy:"discounting the positive or waiting for it to end",Sad:"all-or-nothing or hopeless thinking",Angry:"should statements or blaming",Fearful:"catastrophizing or fortune-telling",Surprised:"jumping to conclusions",Disgusted:"labeling yourself (“I am a failure”)",Bad:"overgeneralizing or “I must do it all”"},TA={Anxious:"mind reading (assuming what others think of you)",Avoidant:"dismissing feelings (“it doesn’t matter”)",Disorganized:"seeing people as all good or all bad",Secure:""};
+$("cbth").textContent="Thought check (CBT)";
+$("cbtb").innerHTML=(S.inten>=7?"<p><b>Ground first.</b> Thinking tools work better once your body has settled.</p>":"")+"<p><b>Thought:</b> what thought sits behind feeling "+sub+"? Write it as one sentence.</p><p><b>Possible thinking trap:</b> "+TP[c]+(TA[S.att]?", and "+TA[S.att]:"")+".</p><p><b>Check it:</b> what supports this thought, and what doesn’t? What would I tell a friend?</p><p><b>Balanced thought:</b> a fairer way to say this is…</p><p><b>Small action:</b> one thing I can do in the next hour.</p><p><b>Learn more:</b> <a href=\"https://beckinstitute.org\" target=\"_blank\" rel=\"noopener\" style=\"color:var(--ink)\">beckinstitute.org ↗</a>. Writing your thoughts down gives your mind a clear task.</p>";
+var dh=$("adp");if(!dh.options.length){var o0=document.createElement("option");o0.value="";o0.textContent="Not sure / skip";dh.appendChild(o0);Object.keys(AD).forEach(function(k){var o=document.createElement("option");o.value=o.textContent=k;dh.appendChild(o)})}dh.value=S.adp||"";dh.onchange=function(){S.adp=this.value;save();render()};
+if(!AD[S.adp]){$("pathc").style.display="none"}else{var ad=AD[S.adp];$("pathc").style.display="";$("pathb").innerHTML="<p><b>"+S.adp+"</b> pattern: "+ad[0]+"</p><p><b>Steps toward earned secure attachment:</b></p><ul>"+ad[1].map(function(x){return"<li>"+x+"</li>"}).join("")+"</ul><p class=\"d\">These are patterns you may recognise in yourself, not labels. Earned security builds slowly and works best when you are calm, not in the middle of a feeling.</p>"}
+$("trig").style.display=S.att?"":"none";if(S.att)$("trig").innerHTML="<p><b>Watch for ("+LBL[S.att]+"):</b> "+TR[S.att][0]+"</p><p><b>Counter-move:</b> "+TR[S.att][1]+"</p>";
+$("dh").textContent=""+(co?"Say or ask":"Reflect (journal or think)");
+$("disc").innerHTML=L.map(function(x){return"<p>"+x+"</p>"}).join("")}
+$("lIFS").onclick=function(){S.lens="ifs";save();render()};
+$("lPAC").onclick=function(){S.lens="pac";save();render()};
+$("resetAll").onclick=function(){try{localStorage.removeItem("innerdash")}catch(e){}S=DEF();G=[0,0,0,0,0];$("q").value="";$("sres").innerHTML="";render()};
+$("tg").onclick=function(){S.mode=S.mode==="co"?"self":"co";S.manual=true;save();render()};
+$("auto").onclick=function(){S.manual=false;save();render()};
+$("fauto").onclick=function(){S.fearManual=false;save();render()};
+$("int").oninput=function(){S.inten=+this.value;save();render()};
+render();
+</script>
+</body>
+</html>
